@@ -20,6 +20,22 @@ printBanner() {
 "
 }
 
+installSublimeText() {
+	echo "---- adding sublime public key"
+	wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+	sudo apt-get install apt-transport-https
+	echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+	echo "---- updating repos"
+	sudo apt-get update
+	sudo apt-get install sublime-text
+}
+
+installNodeJS() {
+	sudo apt-get install python-software-properties
+	curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+	sudo apt-get install -y nodejs
+}
+
 # https://stackoverflow.com/questions/17291233/how-to-check-internet-access-using-bash-script-in-linux
 net_ok=0
 checkNet() {
@@ -70,11 +86,11 @@ fi
 cd $DEBS_DIR
 echo " 4/7 Downloading vs-code, sublime-text and google-chrome ... "
 echo " -> VS Code - Sweet editor for all things TypeScript"
-wget "https://az764295.vo.msecnd.net/stable/19222cdc84ce72202478ba1cec5cb557b71163de/code_1.12.2-1494422229_amd64.deb"
+wget "https://az764295.vo.msecnd.net/stable/b813d12980308015bcd2b3a2f6efa5c810c33ba5/code_1.17.2-1508162334_amd64.deb"
 echo " -> Google Chrome - Everything else is a shadow"
 wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 echo " -> Sublime Text - The editor of a life time"
-wget "https://download.sublimetext.com/sublime-text_build-3126_amd64.deb"
+installSublimeText
 
 clear
 echo " 5/7 Installing vs-code, sublime-text and google-chrome ... "
@@ -88,9 +104,7 @@ cd $MAIN_DIR
 
 clear
 echo " 6/7 Installing nodejs ... "
-sudo apt-get install python-software-properties
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-sudo apt-get install nodejs
+installNodeJS
 
 clear
 echo " 7/7 Installing angularjs ... "
